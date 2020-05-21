@@ -1,0 +1,17 @@
+*.*
+out/*
+build/*
+!*.c
+!*.cpp
+!*.h
+!*.hpp
+!*.txt
+!*.bat
+!*.sh
+!.gitignore
+!.clang-format
+!*.md
+!*.yml
+build/CMakeCache.txt
+build/conanbuildinfo.txt
+build/conaninfo.txt
