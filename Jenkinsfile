@@ -1,12 +1,14 @@
 // Имя выходного файла
-def EXECUTABLE_FILE_NAME = "lib_tcp_udp_server"
+def EXECUTABLE_FILE_NAME = "library"
+// Путь куда будет ставиться либа
+def INSTALL_PATH = "out"
 
 pipeline {
     agent any
     stages {
         stage('build') {
             steps {
-                sh 'bash compile.sh'
+                sh "bash compile.sh ${INSTALL_PATH}"
             }
         }
 
@@ -28,9 +30,17 @@ pipeline {
             }
         }
 
+        stage('archive') {
+            steps {
+                script {
+                    sh "zip -r ${EXECUTABLE_FILE_NAME}.zip ${INSTALL_PATH}"
+                }
+            }
+        }
+
         stage('artifacts') {
             steps {
-                archiveArtifacts artifacts: "build/${EXECUTABLE_FILE_NAME}.a", onlyIfSuccessful: true
+                archiveArtifacts artifacts: "${EXECUTABLE_FILE_NAME}.zip", onlyIfSuccessful: true
             }
         }
 
@@ -40,6 +50,7 @@ pipeline {
             }
         }
     }
+
     options {
         buildDiscarder(logRotator(numToKeepStr: '1'))
     }

@@ -1,7 +1,16 @@
-## Weather Station Server
+## Lib TCP UDP Server
+Библиотека TCP UDP сервера
 
-### Building Using CMake
-If you are using CMake, to build the library you can simply run the `compile.sh` script:
+### Сборка с использованием CMake
+Для сборки библиотеки выполнить скрипт `compile.sh` :
 
 ```sh
 ./compile
+```
+
+Сборка будет установлена в папку `build`.
+Чтобы выполнить установку в отдельную папку необходимо выполнить скрипт `compile.sh` с параметром имени папки.
+```sh
+./compile output
+```
+Выполнит установку библиотеки в папку `output`.
