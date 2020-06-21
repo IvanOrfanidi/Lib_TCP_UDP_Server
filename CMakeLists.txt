@@ -8,7 +8,7 @@ project(tcp_udp_server)
 set(CMAKE_CXX_STANDARD 17)
 
 # Source files
-file(GLOB_RECURSE SOURCES 
+file(GLOB_RECURSE SOURCES
   src/*.cpp
   include/*.h)
 
@@ -18,3 +18,9 @@ add_library(_${PROJECT_NAME} STATIC ${SOURCES})
 install(TARGETS _${PROJECT_NAME} DESTINATION ${PROJECT_NAME}/lib)
 # Install includes
 install(DIRECTORY include DESTINATION ${PROJECT_NAME})
+
+# Link winsock2 for Windows
+if(WIN32)
+  target_link_libraries(_${PROJECT_NAME} wsock32 ws2_32)
+  set(CMAKE_EXE_LINKER_FLAGS " -static -static-libgcc -static-libstdc++")
+endif()
