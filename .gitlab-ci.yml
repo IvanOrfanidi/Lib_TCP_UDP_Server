@@ -1,3 +1,7 @@
 build:
   script:
   - ./compile.sh
+  after_script:
+  - cd /media/storage/gitlab/
+  - sudo rm -rf Lib_TCP_UDP_Server
+  - git clone http://192.168.109.15/root/Lib_TCP_UDP_Server.git
