@@ -30,8 +30,12 @@ endif()
 
 # Source files
 file(GLOB_RECURSE SOURCES
-  src/*.cpp
-  include/*.h)
+  source/*.cpp
+  include/*.h
+)
+
+# Include directories
+include_directories(${CMAKE_CURRENT_SOURCE_DIR})
 
 # Create library
 add_library(_${PROJECT_NAME} STATIC ${SOURCES})

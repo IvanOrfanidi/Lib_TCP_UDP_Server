@@ -15,5 +15,5 @@ mkdir -p ${BUILD_PATH}
 cd ${BUILD_PATH}
 
 cmake -G "Unix Makefiles" .. -DCMAKE_INSTALL_PREFIX=../${INSTALL_PATH}
-cmake --build .
+cmake --build . -- -j4
 make install
