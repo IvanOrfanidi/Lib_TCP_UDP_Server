@@ -81,12 +81,14 @@ void TCP_Server::listen() const
  * 
  * @param sock - cocket number, output param
  */
-void TCP_Server::create(int& sock)
+int TCP_Server::create(int sock) const
 {
+    assert(sock != INVAL_SOCKET);
     sock = ::socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
     if (sock < 0) {
         throw std::runtime_error(error_message::CREATE);
     }
+    return sock;
 }
 
 /**
@@ -96,7 +98,7 @@ void TCP_Server::create(int& sock)
 void TCP_Server::start()
 {
     try {
-        this->create(_socket);
+        _socket = this->create(_socket);
     } catch (const std::exception& e) {
         throw e;
     }
