@@ -13,17 +13,17 @@
 
 namespace tcp_udp_server {
 
-class TCP_Server : public VServer {
+class UDP_Server : public VServer {
 public:
-    TCP_Server();
-    ~TCP_Server();
+    UDP_Server();
+    ~UDP_Server();
 
     /**
-     * @brief Construct a new tcp server::tcp server object
+     * @brief Construct a new udp server::udp server object
      * @param addr - IP address
-     * @param port port - TCP port
+     * @param port port - UDP port
      */
-    TCP_Server(const char* addr, uint16_t port);
+    UDP_Server(const char* addr, uint16_t port);
 
     /**
      * @brief Set IP address
@@ -32,13 +32,10 @@ public:
     virtual void setAddress(const char* addr) override;
 
     /**
-     * @brief Set TCP port
-     * @param port - TCP port
+     * @brief Set UDP port
+     * @param port - UDP port
      */
     virtual void setPort(uint16_t port) override;
-
-    /** Listen socket */
-    void listen() const;
 
     /**
      * @brief Create cocket
@@ -46,10 +43,10 @@ public:
      */
     virtual int create(int sock) const override;
 
-    /** Start TCP server */
+    /** Start UDP server */
     virtual void start() override;
 
-    /** Stop TCP server, socket close */
+    /** Stop UDP server, socket close */
     virtual void stop() const override;
 
     /**
@@ -64,9 +61,6 @@ public:
      * @param length - max data length
      */
     virtual void receive(std::vector<char>& data, const size_t length) override;
-
-    /** Accept socket */
-    virtual void accept() override;
 
     /**
      * @brief Get socket
@@ -85,4 +79,5 @@ private:
     int _socketClient; //< socket number client
     struct sockaddr_in _local;
 };
+
 }

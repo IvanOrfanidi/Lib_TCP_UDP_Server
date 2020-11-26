@@ -7,7 +7,6 @@ namespace tcp_udp_server {
 
 /**
  * @brief Construct a new tcp server::tcp server object
- * 
  */
 TCP_Server::TCP_Server()
     : _socket(INVAL_SOCKET)
@@ -18,7 +17,6 @@ TCP_Server::TCP_Server()
 
 /**
  * @brief Construct a new tcp server::tcp server object
- * 
  * @param addr - IP address
  * @param port port - TCP port
  */
@@ -33,7 +31,6 @@ TCP_Server::TCP_Server(const char* addr, uint16_t port)
 
 /**
  * @brief Destroy the tcp server::tcp server object
- * 
  */
 TCP_Server::~TCP_Server()
 {
@@ -42,7 +39,6 @@ TCP_Server::~TCP_Server()
 
 /**
  * @brief Set IP address
- * 
  * @param addr - IP address
  */
 void TCP_Server::setAddress(const char* addr)
@@ -53,7 +49,6 @@ void TCP_Server::setAddress(const char* addr)
 
 /**
  * @brief Set TCP port
- * 
  * @param port - TCP port
  */
 void TCP_Server::setPort(uint16_t port)
@@ -64,7 +59,6 @@ void TCP_Server::setPort(uint16_t port)
 
 /**
  * @brief Listen socket
- * 
  */
 void TCP_Server::listen() const
 {
@@ -78,7 +72,6 @@ void TCP_Server::listen() const
 
 /**
  * @brief Create cocket
- * 
  * @param sock - cocket number, output param
  */
 int TCP_Server::create(int sock) const
@@ -93,7 +86,6 @@ int TCP_Server::create(int sock) const
 
 /**
  * @brief Start server
- * 
  */
 void TCP_Server::start()
 {
@@ -118,7 +110,6 @@ void TCP_Server::start()
 
 /**
  * @brief Stop server, socket close
- * 
  */
 void TCP_Server::stop() const
 {
@@ -128,14 +119,12 @@ void TCP_Server::stop() const
 
 /**
  * @brief Send data
- * 
  * @param data - data vector
  */
 void TCP_Server::send(const std::vector<char>& data)
 {
     assert(_socketClient != INVAL_SOCKET);
-    const auto res = ::sendto(_socketClient, data.data(), data.size(), 0,
-        (struct sockaddr*)&_local, sizeof(struct sockaddr_in));
+    const auto res = ::sendto(_socketClient, data.data(), data.size(), 0, (struct sockaddr*)&_local, sizeof(struct sockaddr_in));
     if (res <= 0) {
         throw std::runtime_error(error_message::SEND);
     }
@@ -143,7 +132,6 @@ void TCP_Server::send(const std::vector<char>& data)
 
 /**
  * @brief Receive data
- * 
  * @param data - data vector, output param
  * @param length - max data length
  */
@@ -170,7 +158,6 @@ void TCP_Server::receive(std::vector<char>& data, const size_t length)
 
 /**
  * @brief Accept socket
- * 
  */
 void TCP_Server::accept()
 {
@@ -184,7 +171,6 @@ void TCP_Server::accept()
 
 /**
  * @brief Get socket
- * 
  * @return int socket
  */
 int TCP_Server::getSocket() const
@@ -194,11 +180,11 @@ int TCP_Server::getSocket() const
 
 /**
  * @brief Get socket client
- * 
  * @return int socket client
  */
 int TCP_Server::getSocketClient() const
 {
     return _socketClient;
 }
+
 }

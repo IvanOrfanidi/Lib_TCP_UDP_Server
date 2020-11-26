@@ -6,6 +6,7 @@
 #if defined(_WIN32)
 #define _WINSOCK_DEPRECATED_NO_WARNINGS // disable warnings
 #include <winsock2.h>
+#include <ws2tcpip.h>
 #endif
 
 #if defined(__unix__)
@@ -31,6 +32,9 @@ public:
 
     VServer();
     virtual ~VServer();
+
+    VServer(const VServer&) = delete;
+    VServer& operator=(const VServer&) = delete;
 
     /**
      * @brief Set IP address
@@ -97,10 +101,6 @@ protected:
      * @param local - socket local address
      */
     void bind(int sock, sockaddr_in& local) const;
-
-private:
-    VServer(const VServer&) = delete;
-    VServer& operator=(const VServer&) = delete;
 
 #if defined(_WIN32)
     static int _countServers;

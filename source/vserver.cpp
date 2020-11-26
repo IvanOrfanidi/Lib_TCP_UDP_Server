@@ -33,7 +33,6 @@ VServer::~VServer()
 
 /**
  * @brief Close socket
- * 
  * @param sock - socket
  */
 void VServer::close(int sock) const
@@ -50,7 +49,6 @@ void VServer::close(int sock) const
 
 /**
  * @brief Binding cocket
- * 
  * @param sock - socket
  * @param local - socket local address
  */
