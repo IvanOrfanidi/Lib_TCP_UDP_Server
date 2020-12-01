@@ -9,21 +9,21 @@
 #include <unistd.h>
 #endif
 
-#include "vserver.h"
+#include <include/vserver.h>
 
 namespace tcp_udp_server {
 
 class TCP_Server : public VServer {
 public:
     TCP_Server();
-    ~TCP_Server();
+    virtual ~TCP_Server();
 
     /**
      * @brief Construct a new tcp server::tcp server object
      * @param addr - IP address
      * @param port port - TCP port
      */
-    TCP_Server(const char* addr, uint16_t port);
+    explicit TCP_Server(const char* addr, uint16_t port);
 
     /**
      * @brief Set IP address
@@ -66,7 +66,7 @@ public:
     virtual void receive(std::vector<char>& data, const size_t length) override;
 
     /** Accept socket */
-    virtual void accept() override;
+    void accept();
 
     /**
      * @brief Get socket
@@ -74,15 +74,10 @@ public:
      */
     int getSocket() const override;
 
-    /**
-     * @brief Get socket client
-     * @return int socket client
-     */
-    int getSocketClient() const override;
-
 private:
     int _socket; //< socket number
     int _socketClient; //< socket number client
     struct sockaddr_in _local;
 };
+
 }

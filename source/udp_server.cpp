@@ -1,5 +1,6 @@
 #include <cassert>
 #include <stdexcept>
+#include <string.h>
 
 #include <include/udp_server.h>
 
@@ -10,9 +11,9 @@ namespace tcp_udp_server {
  */
 UDP_Server::UDP_Server()
     : _socket(INVAL_SOCKET)
-    , _socketClient(INVAL_SOCKET)
 {
     _local.sin_family = AF_INET;
+    memset(&_client, 0, sizeof(_client));
 }
 
 /**
@@ -63,7 +64,6 @@ void UDP_Server::setPort(uint16_t port)
  */
 int UDP_Server::create(int sock) const
 {
-    assert(sock != INVAL_SOCKET);
     sock = ::socket(AF_INET, SOCK_DGRAM, IPPROTO_UDP);
     if (sock < 0) {
         throw std::runtime_error(error_message::CREATE);
@@ -83,6 +83,7 @@ void UDP_Server::start()
     }
 
     try {
+        // Bind the socket with the server address
         VServer::bind(_socket, _local);
     } catch (...) {
         throw std::current_exception();
@@ -104,8 +105,8 @@ void UDP_Server::stop() const
  */
 void UDP_Server::send(const std::vector<char>& data)
 {
-    assert(_socketClient != INVAL_SOCKET);
-    const auto res = ::sendto(_socketClient, data.data(), data.size(), 0, (struct sockaddr*)&_local, sizeof(struct sockaddr_in));
+    assert(_socket != INVAL_SOCKET);
+    const auto res = ::sendto(_socket, data.data(), data.size(), MSG_CONFIRM, (struct sockaddr*)&_client, sizeof(struct sockaddr_in));
     if (res <= 0) {
         throw std::runtime_error(error_message::SEND);
     }
@@ -118,9 +119,9 @@ void UDP_Server::send(const std::vector<char>& data)
  */
 void UDP_Server::receive(std::vector<char>& data, const size_t length)
 {
-    assert(_socketClient != INVAL_SOCKET);
-    const int addrClientLen = sizeof(_local);
-    const auto len = ::recvfrom(_socketClient, data.data(), length, 0, (struct sockaddr*)&_local, (socklen_t*)addrClientLen);
+    assert(_socket != INVAL_SOCKET);
+    int addrClientLen = sizeof(_client);
+    const auto len = ::recvfrom(_socket, data.data(), length, MSG_WAITALL, (struct sockaddr*)&_client, (socklen_t*)&addrClientLen);
     if (len < 0) {
         throw std::runtime_error(error_message::RECEIVE);
     }
@@ -134,15 +135,6 @@ void UDP_Server::receive(std::vector<char>& data, const size_t length)
 int UDP_Server::getSocket() const
 {
     return _socket;
-}
-
-/**
- * @brief Get socket client
- * @return int socket client
- */
-int UDP_Server::getSocketClient() const
-{
-    return _socketClient;
 }
 
 }

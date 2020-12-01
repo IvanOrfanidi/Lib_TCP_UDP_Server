@@ -76,7 +76,6 @@ void TCP_Server::listen() const
  */
 int TCP_Server::create(int sock) const
 {
-    assert(sock != INVAL_SOCKET);
     sock = ::socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
     if (sock < 0) {
         throw std::runtime_error(error_message::CREATE);
@@ -176,15 +175,6 @@ void TCP_Server::accept()
 int TCP_Server::getSocket() const
 {
     return _socket;
-}
-
-/**
- * @brief Get socket client
- * @return int socket client
- */
-int TCP_Server::getSocketClient() const
-{
-    return _socketClient;
 }
 
 }

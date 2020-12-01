@@ -17,6 +17,7 @@
 #endif
 
 namespace tcp_udp_server {
+
 namespace error_message {
     const std::string CREATE = "server socket not create";
     const std::string BIND = "server socket bind failed";
@@ -73,20 +74,11 @@ public:
      */
     virtual void receive(std::vector<char>& data, const size_t length) = 0;
 
-    /** Accept socket */
-    virtual void accept() = 0;
-
     /**
      * @brief Get socket
      * @return int socket
      */
     virtual int getSocket() const = 0;
-
-    /**
-     * @brief Get socket client
-     * @return int socket client
-     */
-    virtual int getSocketClient() const = 0;
 
 protected:
     /**
@@ -106,4 +98,5 @@ protected:
     static int _countServers;
 #endif
 };
+
 }
