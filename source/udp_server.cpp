@@ -106,7 +106,7 @@ void UDP_Server::stop() const
 void UDP_Server::send(const std::vector<char>& data)
 {
     assert(_socket != INVAL_SOCKET);
-    const auto res = ::sendto(_socket, data.data(), data.size(), MSG_CONFIRM, (struct sockaddr*)&_client, sizeof(struct sockaddr_in));
+    const auto res = ::sendto(_socket, data.data(), data.size(), 0, (struct sockaddr*)&_client, sizeof(struct sockaddr_in));
     if (res <= 0) {
         throw std::runtime_error(error_message::SEND);
     }
