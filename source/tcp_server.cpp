@@ -90,20 +90,20 @@ void TCP_Server::start()
 {
     try {
         _socket = this->create(_socket);
-    } catch (const std::exception& e) {
-        throw e;
+    } catch (...) {
+        throw std::current_exception();
     }
 
     try {
         VServer::bind(_socket, _local);
-    } catch (const std::exception& e) {
-        throw e;
+    } catch (...) {
+        throw std::current_exception();
     }
 
     try {
         this->listen();
-    } catch (const std::exception& e) {
-        throw e;
+    } catch (...) {
+        throw std::current_exception();
     }
 }
 

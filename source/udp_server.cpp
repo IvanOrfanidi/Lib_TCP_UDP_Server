@@ -83,7 +83,6 @@ void UDP_Server::start()
     }
 
     try {
-        // Bind the socket with the server address
         VServer::bind(_socket, _local);
     } catch (...) {
         throw std::current_exception();
