@@ -60,4 +60,5 @@ void VServer::bind(int sock, struct sockaddr_in& local) const
         throw std::runtime_error(error_message::BIND);
     }
 }
+
 }

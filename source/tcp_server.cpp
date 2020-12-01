@@ -76,7 +76,6 @@ void TCP_Server::listen() const
  */
 int TCP_Server::create(int sock) const
 {
-    assert(sock != INVAL_SOCKET);
     sock = ::socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
     if (sock < 0) {
         throw std::runtime_error(error_message::CREATE);
@@ -91,20 +90,20 @@ void TCP_Server::start()
 {
     try {
         _socket = this->create(_socket);
-    } catch (const std::exception& e) {
-        throw e;
+    } catch (...) {
+        throw std::current_exception();
     }
 
     try {
         VServer::bind(_socket, _local);
-    } catch (const std::exception& e) {
-        throw e;
+    } catch (...) {
+        throw std::current_exception();
     }
 
     try {
         this->listen();
-    } catch (const std::exception& e) {
-        throw e;
+    } catch (...) {
+        throw std::current_exception();
     }
 }
 
@@ -176,15 +175,6 @@ void TCP_Server::accept()
 int TCP_Server::getSocket() const
 {
     return _socket;
-}
-
-/**
- * @brief Get socket client
- * @return int socket client
- */
-int TCP_Server::getSocketClient() const
-{
-    return _socketClient;
 }
 
 }
