@@ -21,7 +21,7 @@ public:
     /**
      * @brief Construct a new udp server::udp server object
      * @param addr - IP address
-     * @param port port - UDP port
+     * @param port - UDP port
      */
     explicit UDP_Server(const char* addr, uint16_t port);
 

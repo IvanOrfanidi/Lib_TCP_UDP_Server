@@ -27,7 +27,7 @@ UDP_Server::~UDP_Server()
 /**
  * @brief Construct a new udp server::udp server object
  * @param addr - IP address
- * @param port port - UDP port
+ * @param port - UDP port
  */
 UDP_Server::UDP_Server(const char* addr, uint16_t port)
     : UDP_Server()
