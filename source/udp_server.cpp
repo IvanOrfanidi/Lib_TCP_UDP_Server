@@ -34,8 +34,8 @@ UDP_Server::UDP_Server(const char* addr, uint16_t port)
 {
     assert(addr != nullptr);
     assert(port != 0);
-    _local.sin_addr.s_addr = ::inet_addr(addr);
-    _local.sin_port = ::htons(port);
+    _local.sin_addr.s_addr = inet_addr(addr);
+    _local.sin_port = htons(port);
 }
 
 /**
@@ -45,7 +45,7 @@ UDP_Server::UDP_Server(const char* addr, uint16_t port)
 void UDP_Server::setAddress(const char* addr)
 {
     assert(addr != nullptr);
-    _local.sin_addr.s_addr = ::inet_addr(addr);
+    _local.sin_addr.s_addr = inet_addr(addr);
 }
 
 /**
@@ -55,16 +55,16 @@ void UDP_Server::setAddress(const char* addr)
 void UDP_Server::setPort(uint16_t port)
 {
     assert(port != 0);
-    _local.sin_port = ::htons(port);
+    _local.sin_port = htons(port);
 }
 
 /**
- * @brief Create cocket
- * @param sock - cocket number, output param
+ * @brief Create socket
+ * @param sock - socket number, output param
  */
-int UDP_Server::create(int sock) const
+int UDP_Server::createSocket(int sock) const
 {
-    sock = ::socket(AF_INET, SOCK_DGRAM, IPPROTO_UDP);
+    sock = socket(AF_INET, SOCK_DGRAM, IPPROTO_UDP);
     if (sock < 0) {
         throw std::runtime_error(error_message::CREATE);
     }
@@ -77,13 +77,13 @@ int UDP_Server::create(int sock) const
 void UDP_Server::start()
 {
     try {
-        _socket = this->create(_socket);
+        _socket = createSocket(_socket);
     } catch (...) {
         throw std::current_exception();
     }
 
     try {
-        VServer::bind(_socket, _local);
+        VServer::bindSocket(_socket, _local);
     } catch (...) {
         throw std::current_exception();
     }
@@ -94,19 +94,19 @@ void UDP_Server::start()
  */
 void UDP_Server::stop() const
 {
-    ::shutdown(_socket, 1);
-    close(_socket);
+    shutdown(_socket, 1);
+    closeSocket(_socket);
 }
 
 /**
  * @brief Send data
  * @param data - data vector
  */
-void UDP_Server::send(const std::vector<char>& data)
+void UDP_Server::sendData(const std::vector<char>& data)
 {
     assert(_socket != INVAL_SOCKET);
-    const auto res = ::sendto(_socket, data.data(), data.size(), 0, (struct sockaddr*)&_client, sizeof(struct sockaddr_in));
-    if (res <= 0) {
+    const auto res = sendto(_socket, data.data(), data.size(), 0, (struct sockaddr*)&_client, sizeof(struct sockaddr_in));
+    if (res < 1) {
         throw std::runtime_error(error_message::SEND);
     }
 }
@@ -116,11 +116,11 @@ void UDP_Server::send(const std::vector<char>& data)
  * @param data - data vector, output param
  * @param length - max data length
  */
-void UDP_Server::receive(std::vector<char>& data, const size_t length)
+void UDP_Server::receiveData(std::vector<char>& data, const size_t length)
 {
     assert(_socket != INVAL_SOCKET);
     int addrClientLen = sizeof(_client);
-    const auto len = ::recvfrom(_socket, data.data(), length, 0, (struct sockaddr*)&_client, (socklen_t*)&addrClientLen);
+    const auto len = recvfrom(_socket, data.data(), length, 0, (struct sockaddr*)&_client, (socklen_t*)&addrClientLen);
     if (len < 0) {
         throw std::runtime_error(error_message::RECEIVE);
     }

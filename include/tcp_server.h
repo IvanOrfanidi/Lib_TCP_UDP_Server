@@ -38,13 +38,13 @@ public:
     virtual void setPort(uint16_t port) override;
 
     /** Listen socket */
-    void listen() const;
+    void listenSocket() const;
 
     /**
-     * @brief Create cocket
-     * @param sock - cocket number, output param
+     * @brief Create socket
+     * @param sock - socket number, output param
      */
-    virtual int create(int sock) const override;
+    virtual int createSocket(int sock) const override;
 
     /** Start TCP server */
     virtual void start() override;
@@ -56,17 +56,17 @@ public:
      * @brief Send data
      * @param data - data vector
      */
-    virtual void send(const std::vector<char>& data) override;
+    virtual void sendData(const std::vector<char>& data) override;
 
     /**
      * @brief Receive data
      * @param data - data vector, output param
      * @param length - max data length
      */
-    virtual void receive(std::vector<char>& data, const size_t length) override;
+    virtual void receiveData(std::vector<char>& data, const size_t length) override;
 
     /** Accept socket */
-    void accept();
+    void acceptSocket();
 
     /**
      * @brief Get socket

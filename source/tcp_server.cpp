@@ -25,8 +25,8 @@ TCP_Server::TCP_Server(const char* addr, uint16_t port)
 {
     assert(addr != nullptr);
     assert(port != 0);
-    _local.sin_addr.s_addr = ::inet_addr(addr);
-    _local.sin_port = ::htons(port);
+    _local.sin_addr.s_addr = inet_addr(addr);
+    _local.sin_port = htons(port);
 }
 
 /**
@@ -44,7 +44,7 @@ TCP_Server::~TCP_Server()
 void TCP_Server::setAddress(const char* addr)
 {
     assert(addr != nullptr);
-    _local.sin_addr.s_addr = ::inet_addr(addr);
+    _local.sin_addr.s_addr = inet_addr(addr);
 }
 
 /**
@@ -54,29 +54,29 @@ void TCP_Server::setAddress(const char* addr)
 void TCP_Server::setPort(uint16_t port)
 {
     assert(port != 0);
-    _local.sin_port = ::htons(port);
+    _local.sin_port = htons(port);
 }
 
 /**
  * @brief Listen socket
  */
-void TCP_Server::listen() const
+void TCP_Server::listenSocket() const
 {
     assert(_socket != INVAL_SOCKET);
     constexpr int QUEUE_LENGTH = 5;
-    const auto res = ::listen(_socket, QUEUE_LENGTH);
+    const auto res = listen(_socket, QUEUE_LENGTH);
     if (res < 0) {
         throw std::runtime_error(error_message::LISTEN);
     }
 }
 
 /**
- * @brief Create cocket
- * @param sock - cocket number, output param
+ * @brief Create socket
+ * @param sock - socket number, output param
  */
-int TCP_Server::create(int sock) const
+int TCP_Server::createSocket(int sock) const
 {
-    sock = ::socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
+    sock = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
     if (sock < 0) {
         throw std::runtime_error(error_message::CREATE);
     }
@@ -89,19 +89,19 @@ int TCP_Server::create(int sock) const
 void TCP_Server::start()
 {
     try {
-        _socket = this->create(_socket);
+        _socket = createSocket(_socket);
     } catch (...) {
         throw std::current_exception();
     }
 
     try {
-        VServer::bind(_socket, _local);
+        VServer::bindSocket(_socket, _local);
     } catch (...) {
         throw std::current_exception();
     }
 
     try {
-        this->listen();
+        listenSocket();
     } catch (...) {
         throw std::current_exception();
     }
@@ -112,19 +112,19 @@ void TCP_Server::start()
  */
 void TCP_Server::stop() const
 {
-    ::shutdown(_socket, 1);
-    close(_socket);
+    shutdown(_socket, 1);
+    closeSocket(_socket);
 }
 
 /**
  * @brief Send data
  * @param data - data vector
  */
-void TCP_Server::send(const std::vector<char>& data)
+void TCP_Server::sendData(const std::vector<char>& data)
 {
     assert(_socketClient != INVAL_SOCKET);
-    const auto res = ::sendto(_socketClient, data.data(), data.size(), 0, (struct sockaddr*)&_local, sizeof(struct sockaddr_in));
-    if (res <= 0) {
+    const auto res = sendto(_socketClient, data.data(), data.size(), 0, (struct sockaddr*)&_local, sizeof(struct sockaddr_in));
+    if (res < 1) {
         throw std::runtime_error(error_message::SEND);
     }
 }
@@ -134,11 +134,11 @@ void TCP_Server::send(const std::vector<char>& data)
  * @param data - data vector, output param
  * @param length - max data length
  */
-void TCP_Server::receive(std::vector<char>& data, const size_t length)
+void TCP_Server::receiveData(std::vector<char>& data, const size_t length)
 {
     assert(_socketClient != INVAL_SOCKET);
     while (true) {
-        const auto len = ::recv(_socketClient, data.data(), length, 0);
+        const auto len = recv(_socketClient, data.data(), length, 0);
         if (len < 0) {
             if (errno == EINTR) {
                 continue;
@@ -158,11 +158,11 @@ void TCP_Server::receive(std::vector<char>& data, const size_t length)
 /**
  * @brief Accept socket
  */
-void TCP_Server::accept()
+void TCP_Server::acceptSocket()
 {
     // Get client socket descriptor
     assert(_socket != INVAL_SOCKET);
-    _socketClient = ::accept(_socket, NULL, NULL);
+    _socketClient = accept(_socket, NULL, NULL);
     if (_socketClient < 0) {
         throw std::runtime_error(error_message::ACCEPT);
     }
