@@ -32,10 +32,22 @@ public:
     virtual void setAddress(const char* addr) override;
 
     /**
+     * @brief Get the IP Address
+     * @return std::string IP address
+     */
+    virtual std::string getAddress() const override;
+
+    /**
      * @brief Set UDP port
      * @param port - UDP port
      */
     virtual void setPort(uint16_t port) override;
+
+    /**
+     * @brief Get the UDP Port
+     * @return uint16_t UDP Port
+     */
+    virtual uint16_t getPort() const override;
 
     /**
      * @brief Create socket

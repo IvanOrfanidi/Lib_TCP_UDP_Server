@@ -49,6 +49,15 @@ void UDP_Server::setAddress(const char* addr)
 }
 
 /**
+ * @brief Get the IP Address
+ * @return std::string IP address
+ */
+std::string UDP_Server::getAddress() const
+{
+    return inet_ntoa(_local.sin_addr);
+}
+
+/**
  * @brief Set UDP port
  * @param port - UDP port
  */
@@ -56,6 +65,15 @@ void UDP_Server::setPort(uint16_t port)
 {
     assert(port != 0);
     _local.sin_port = htons(port);
+}
+
+/**
+ * @brief Get UDP port
+ * @return port - UDP port
+ */
+uint16_t UDP_Server::getPort() const
+{
+    return ntohs(_local.sin_port);
 }
 
 /**

@@ -44,10 +44,22 @@ public:
     virtual void setAddress(const char* addr) = 0;
 
     /**
+     * @brief Get the IP Address
+     * @return std::string IP address
+     */
+    virtual std::string getAddress() const = 0;
+
+    /**
      * @brief Set TCP port
      * @param port - TCP port
      */
     virtual void setPort(uint16_t port) = 0;
+
+    /**
+     * @brief Get the Port
+     * @return uint16_t port
+     */
+    virtual uint16_t getPort() const = 0;
 
     /**
      * @brief Create socket
